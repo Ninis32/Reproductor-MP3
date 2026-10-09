@@ -1,0 +1,40 @@
+﻿# Dependencias de Node.js
+node_modules/
+
+# Archivos generados por Angular
+dist/
+.angular/
+coverage/
+
+# Archivos web generados por Capacitor
+www/
+
+# Archivos temporales y registros
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Configuración privada
+.env
+.env.*
+!.env.example
+
+# Configuración local de Android
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
+
+# Archivos de compilación y paquetes generados
+*.apk
+*.aab
+
+# Claves de firma: nunca subirlas a GitHub
+*.jks
+*.keystore
+
+# Configuración del editor
+.vscode/
+.idea/
