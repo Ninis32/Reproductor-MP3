@@ -152,7 +152,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
     if (added) {
       this.message = `${added} canción(es) guardadas para escuchar sin Internet.`;
-      if (this.index < 0) await this.playTrack(0); 
+      if (this.index < 0) await this.playTrack(0);
     } else if (!this.message) {
       this.message = 'No se importaron canciones. Elige archivos de audio compatibles.';
     }
@@ -280,22 +280,32 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       });
       await MediaSession.setActionHandler({ action: 'stop' }, () => { this.audioRef.nativeElement.pause(); });
       this.mediaHandlersReady = true;
-    } catch {
-      this.message = 'Los controles del sistema estarán disponibles después de sincronizar y compilar Android.';
+    } catch (err) {
+      console.warn('MediaSession no disponible nativamente:', err);
     }
   }
 
   private async updateMediaMetadata(): Promise<void> {
     if (!this.current || !Capacitor.isNativePlatform()) return;
     try {
-      await MediaSession.setMetadata({ title: this.current.name, artist: 'Biblioteca local', album: 'Winamp Offline', artwork: [] });
-    } catch { /* El navegador de escritorio no tiene controles nativos de Android. */ }
+      await MediaSession.setMetadata({ 
+        title: this.current.name, 
+        artist: 'Biblioteca local', 
+        album: 'Winamp Offline', 
+        artwork: [] 
+      });
+    } catch (err) {
+      console.warn('Error al actualizar metadatos:', err);
+    }
   }
 
   private async updateMediaPlaybackState(playbackState: 'playing' | 'paused' | 'none'): Promise<void> {
     if (!Capacitor.isNativePlatform()) return;
-    try { await MediaSession.setPlaybackState({ playbackState }); }
-    catch { /* Se sincronizará cuando la app se ejecute en Android nativo. */ }
+    try { 
+      await MediaSession.setPlaybackState({ playbackState }); 
+    } catch (err) {
+      console.warn('Error al actualizar estado de reproducción:', err);
+    }
   }
 
   time(n: number): string {
